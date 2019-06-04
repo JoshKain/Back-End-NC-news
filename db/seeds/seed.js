@@ -5,6 +5,11 @@ const {
   topicsData
 } = require("../data/index");
 const { formatTimestamp } = require("../../utils/convert-timestamp");
+const {
+  createRef,
+  formatBelongToKey,
+  formatData
+} = require("../../utils/format-comments");
 
 exports.seed = (knex, Promise) => {
   console.log("seeding ........");
@@ -16,13 +21,24 @@ exports.seed = (knex, Promise) => {
     .then(() => {
       return knex("articles")
         .insert(formatTimestamp(articlesData, "created_at"))
-        .returning("*");
-    })
-    .then(() => {
-      console.log(commentsData);
-      return knex("comments")
-        .insert(formatTimestamp(commentsData, "created_at"))
-        .returning("*");
-    })
-    .then(console.log);
+        .returning("*")
+        .then(articles => {
+          let ref = createRef(articles, "title", "article_id");
+          let comments = formatBelongToKey(
+            commentsData,
+            "created_by",
+            "author"
+          );
+          let formatedData = formatData(comments, ref);
+          let final = formatBelongToKey(
+            formatedData,
+            "belongs_to",
+            "article_id"
+          );
+          return knex("comments")
+            .insert(formatTimestamp(final, "created_at"))
+            .returning("*");
+        })
+        .then(console.log);
+    });
 };
