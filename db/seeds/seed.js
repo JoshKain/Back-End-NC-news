@@ -38,7 +38,6 @@ exports.seed = (knex, Promise) => {
           return knex("comments")
             .insert(formatTimestamp(final, "created_at"))
             .returning("*");
-        })
-        .then(console.log);
+        });
     });
 };

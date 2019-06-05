@@ -119,7 +119,7 @@ describe("#createRef", () => {
   });
 });
 
-describe.only("#formatData", () => {
+describe("#formatData", () => {
   it("given an empty arr in either parameter should return the dataArr", () => {
     expect(formatData([], [{ hello: 1 }])).to.eql([]);
     expect(formatData([], [])).to.eql([]);

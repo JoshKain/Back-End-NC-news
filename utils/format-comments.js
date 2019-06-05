@@ -1,6 +1,6 @@
-exports.formatBelongToKey = (commentsData, keyToChange, newKey) => {
-  if (!keyToChange) return [...commentsData];
-  return commentsData.map(comments => {
+exports.formatBelongToKey = (dataArr, keyToChange, newKey) => {
+  if (!keyToChange) return [...dataArr];
+  return dataArr.map(comments => {
     const value = { [newKey]: comments[keyToChange], ...comments };
     delete value[keyToChange];
     return value;
