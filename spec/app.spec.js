@@ -295,58 +295,71 @@ describe("/", () => {
               });
           });
         });
-        describe("/:comments_id", () => {
-          it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
-            return request(app)
-              .patch("/api/comments/1")
-              .send({ inc_Votes: 6 })
-              .expect(200)
-              .then(({ body }) => {
-                expect(body.comment[0]).to.have.keys(
-                  "comment_id",
-                  "author",
-                  "article_id",
-                  "votes",
-                  "created_at",
-                  "body"
-                );
-              });
+      });
+    });
+    describe("/:comments_id", () => {
+      it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_Votes: 6 })
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comment[0]).to.have.keys(
+              "comment_id",
+              "author",
+              "article_id",
+              "votes",
+              "created_at",
+              "body"
+            );
           });
-          it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
-            return request(app)
-              .patch("/api/comments/1")
-              .send({ inc_Votes: 6 })
-              .expect(200)
-              .then(({ body }) => {
-                expect(body.comment[0].votes).to.eql(22);
-              });
+      });
+      it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_Votes: 6 })
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comment[0].votes).to.eql(22);
           });
-          it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
-            return request(app)
-              .patch("/api/comments/2")
-              .send({ inc_Votes: "hello" })
-              .expect(400)
-              .then(error => {
-                expect(error.text).to.equal("Bad Request");
-              });
+      });
+      it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
+        return request(app)
+          .patch("/api/comments/2")
+          .send({ inc_Votes: "hello" })
+          .expect(400)
+          .then(error => {
+            expect(error.text).to.equal("Bad Request");
           });
-          it("PATCH STATUS:404, if vaild input by comment_id is not found ", () => {
-            return request(app)
-              .patch("/api/comments/999")
-              .send({ inc_Votes: 6 })
-              .expect(404)
-              .then(error => {
-                expect(error.text).to.equal("Route Not Found");
-              });
+      });
+      it("PATCH STATUS:404, if vaild input by comment_id is not found ", () => {
+        return request(app)
+          .patch("/api/comments/999")
+          .send({ inc_Votes: 6 })
+          .expect(404)
+          .then(error => {
+            expect(error.text).to.equal("Route Not Found");
           });
-        });
-        describe.only("/:comment_id", () => {
-          it("DELETE, status:204 delete a comment by given comment_id", () => {
-            return request(app)
-              .delete("/api/comments/999")
-              .expect(204);
+      });
+    });
+    describe("/:comment_id", () => {
+      it("DELETE, status:204 delete a comment by given comment_id", () => {
+        return request(app)
+          .delete("/api/comments/2")
+          .expect(204);
+      });
+      it("DELETE, status:400 invaild comment_id", () => {
+        return request(app)
+          .delete("/api/comments/hello")
+          .expect(400);
+      });
+      it("DELETE, status:404 vaild comment_id but none existent", () => {
+        return request(app)
+          .delete("/api/comments/999")
+          .expect(404)
+          .then(({ error }) => {
+            expect(error.text).to.equal("No such comment_id");
           });
-        });
       });
     });
   });
