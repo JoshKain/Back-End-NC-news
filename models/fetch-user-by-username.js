@@ -4,6 +4,5 @@ exports.fetchUserById = ({ username }) => {
   return connection
     .select("*")
     .from("users")
-    .where({ username })
-    .returning("*");
+    .where({ username });
 };

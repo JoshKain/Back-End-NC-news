@@ -12,7 +12,6 @@ const {
 } = require("../../utils/format-comments");
 
 exports.seed = (knex, Promise) => {
-  console.log("seeding ........");
   return knex.migrate
     .rollback()
     .then(() => knex.migrate.latest())

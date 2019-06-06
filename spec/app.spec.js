@@ -1,10 +1,15 @@
 process.env.NODE_ENV = "test";
+const chai = require("chai");
 
 const { expect } = require("chai");
 const request = require("supertest");
 
 const app = require("../app");
 const connection = require("../db/connection");
+
+const chaiSorted = require("chai-sorted");
+
+chai.use(chaiSorted);
 
 describe("/", () => {
   beforeEach(() => connection.seed.run());
@@ -143,8 +148,11 @@ describe("/", () => {
         describe("/comments", () => {
           it("POST STATUS: 201, request body accepts an obj with username and body properties responds with posted comment ", () => {
             return request(app)
-              .post("/api/articles/22/comments")
-              .send({ username: "lurker", body: "today is a good day" })
+              .post("/api/articles/1/comments")
+              .send({
+                username: "lurker",
+                body: "today is a good day"
+              })
               .expect(201)
               .then(({ body }) => {
                 expect(body.newComment[0].author).to.equal("lurker");
@@ -158,26 +166,66 @@ describe("/", () => {
                 );
               });
           });
+          it("POST STATUS: 404, invalid username input ", () => {
+            return request(app)
+              .post("/api/articles/22/comments")
+              .send({ username: "mitch", body: "today is a good day" })
+              .expect(404)
+              .then(err => {
+                expect(err.text).to.eql("Invalid username input");
+              });
+          });
+          it("POST STATUS: 400, invaild parametric point ", () => {
+            return request(app)
+              .post("/api/articles/hello/comments")
+              .send({ username: "lurker", body: "today is a good day" })
+              .expect(400)
+              .then(err => {
+                expect(err.text).to.eql("Bad Request");
+              });
+          });
         });
-        it("POST STATUS: 404, invalid username input ", () => {
-          return request(app)
-            .post("/api/articles/22/comments")
-            .send({ username: "mitch", body: "today is a good day" })
-            .expect(404)
-            .then(err => {
-              expect(err.text).to.eql("Invalid username input");
-            });
-        });
-        it("POST STATUS: 400, invaild keys given ", () => {
-          return request(app)
-            .post("/api/articles/22/comments")
-            .send({ text: "lurker", body: "today is a good day" })
-            .expect(400)
-            .then(err => {
-              expect(err.text).to.eql(
-                "Incorrect properties does not exist on comments"
-              );
-            });
+        describe.only("/comments", () => {
+          it("GET status :200 responds with array of comments for a given article_id", () => {
+            return request(app)
+              .get("/api/articles/5/comments")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comments).to.have.lengthOf(2);
+                expect(body.comments[0]).to.have.keys(
+                  "comment_id",
+                  "votes",
+                  "article_id",
+                  "body",
+                  "author",
+                  "created_at"
+                );
+              });
+          });
+          it("POST STATUS: 404, valid username input but no such article_id ", () => {
+            return request(app)
+              .get("/api/articles/2/comments")
+              .expect(404)
+              .then(err => {
+                expect(err.text).to.eql("Route Not Found");
+              });
+          });
+          it("POST STATUS: 400, invalid username input ", () => {
+            return request(app)
+              .get("/api/articles/hello/comments")
+              .expect(400)
+              .then(err => {
+                expect(err.text).to.eql("Bad Request");
+              });
+          });
+          it("Get status 200 takes a sortby query", () => {
+            return request(app)
+              .get("/api/articles/1/comments?sort_by=votes&&order=asc")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comments).to.be.sortedBy("votes");
+              });
+          });
         });
       });
     });
