@@ -4,6 +4,9 @@ const { addNewComment } = require("../controllers/add-comment");
 const {
   sendCommentsByArticle_id
 } = require("../controllers/send-comments-by-article_id");
+const { sendAllArticles } = require("../controllers/send-all-articles");
+
+articlesRouter.route("/").get(sendAllArticles);
 
 articlesRouter
   .route("/:article_id")

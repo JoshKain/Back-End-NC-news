@@ -15,7 +15,7 @@ describe("/", () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe("/api", () => {
-    it("GET status:200", () => {
+    it("GET STATUS:200", () => {
       return request(app)
         .get("/api")
         .expect(200)
@@ -24,7 +24,7 @@ describe("/", () => {
         });
     });
     describe("/topics", () => {
-      it("GET status: 200,  should return all topics with keys description and slug", () => {
+      it("GET STATUS: 200,  should return all topics with keys description and slug", () => {
         return request(app)
           .get("/api/topics")
           .expect(200)
@@ -33,7 +33,7 @@ describe("/", () => {
             expect(body.topics[0]).to.contain.keys("slug", "description");
           });
       });
-      it("GET status: 405 route not found if anything else is attached to topics", () => {
+      it("GET STATUS: 404 route not found if anything else is attached to topics", () => {
         return request(app)
           .get("/api/topic/invaild")
           .expect(404)
@@ -44,7 +44,7 @@ describe("/", () => {
     });
     describe("/users", () => {
       describe(":username", () => {
-        it("GET status: 200 should return a user object with following properties username, avatar_url, name for specific user", () => {
+        it("GET STATUS: 200 should return a user object with following properties username, avatar_url, name for specific user", () => {
           return request(app)
             .get("/api/users/lurker")
             .then(({ body }) => {
@@ -52,15 +52,15 @@ describe("/", () => {
               expect(body.user).to.have.keys("username", "avatar_url", "name");
             });
         });
-        it("GET status: 404, if user has made a Invaild Route for 1", () => {
+        it("GET STATUS: 404, if user has made a Invaild Route for 1", () => {
           return request(app)
-            .get(`/api/users/${1}`)
+            .get(`/api/users/1`)
             .expect(404)
             .then(({ error }) => {
               expect(error.text).to.equal("Invalid Route for 1 request");
             });
         });
-        it("GET status: 404, if user has made a Invaild Route for hello", () => {
+        it("GET STATUS: 404, if user has made a Invaild Route for hello", () => {
           return request(app)
             .get(`/api/users/${["hello"]}`)
             .expect(404)
@@ -68,7 +68,7 @@ describe("/", () => {
               expect(error.text).to.equal("Invalid Route for hello request");
             });
         });
-        it("GET status: 404, if user used right syntax just username is invalid", () => {
+        it("GET STATUS: 404, if user used right syntax just username is invalid", () => {
           return request(app)
             .get("/api/users/Josh")
             .expect(404)
@@ -79,8 +79,76 @@ describe("/", () => {
       });
     });
     describe("/articles", () => {
+      it("GET STATUS::200, responds with an articles array of article objects each with properties author, title, article_id, topic, created_at, votes and comment count", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.length).to.equal(12);
+            expect(body[0]).to.have.keys(
+              "author",
+              "title",
+              "article_id",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+              "body"
+            );
+          });
+      });
+      it("GET STATUS::200, responds with an articles array sorted by specific property and in asc order", () => {
+        return request(app)
+          .get("/api/articles?sort_by=created_at&&order=asc")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).to.be.ascendingBy("created_at");
+          });
+      });
+      it("GET STATUS::200, responds with an articles array sorted by specific property and in desc order", () => {
+        return request(app)
+          .get("/api/articles?sort_by=article_id")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).to.be.descendingBy("article_id");
+          });
+      });
+      it("GET STATUS::200, responds with an articles array of username value specified to a query for an author", () => {
+        return request(app)
+          .get("/api/articles?author=butter_bridge")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body[0].author).to.equal("butter_bridge");
+            expect(body).to.have.length(3);
+          });
+      });
+      it("GET STATUS::404,responds with an error due to an invaild input", () => {
+        return request(app)
+          .get("/api/articles?author=R2D2")
+          .expect(404)
+          .then(({ error }) => {
+            expect(error.text).to.equal("No such author or topic");
+          });
+      });
+      it("GET STATUS::200, responds with an articles array of topics value specified to a query for an topic", () => {
+        return request(app)
+          .get("/api/articles?topic=cats")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body[0].topic).to.equal("cats");
+            expect(body).to.have.length(1);
+          });
+      });
+      it("GET STATUS::404,responds with an error due to an invaild input", () => {
+        return request(app)
+          .get("/api/articles?topic=xx")
+          .expect(404)
+          .then(({ error }) => {
+            expect(error.text).to.equal("No such author or topic");
+          });
+      });
       describe("/:article_id", () => {
-        it("GET status:200, reponds an article obj which should have following properties,author, title, article_id, body, topic, created_at,votes, comment_count ", () => {
+        it("GET STATUS:200, reponds an article obj which should have following properties,author, title, article_id, body, topic, created_at,votes, comment_count ", () => {
           return request(app)
             .get("/api/articles/1")
             .expect(200)
@@ -98,7 +166,7 @@ describe("/", () => {
               );
             });
         });
-        it("GET status: 400, if user has made a Bad Request", () => {
+        it("GET STATUS: 400, if user has made a Bad Request", () => {
           return request(app)
             .get(`/api/articles/hello`)
             .expect(400)
@@ -106,7 +174,7 @@ describe("/", () => {
               expect(error.text).to.equal("Bad Request");
             });
         });
-        it("GET status: 404, if user has made a okay Request but not such article id", () => {
+        it("GET STATUS: 404, if user has made a okay Request but not such article id", () => {
           return request(app)
             .get(`/api/articles/999`)
             .expect(404)
@@ -116,7 +184,7 @@ describe("/", () => {
         });
       });
       describe("/:article_id", () => {
-        it("PATCH -article_id- status : 200  increments house points up and down on an updated article ", () => {
+        it("PATCH -article_id- STATUS:: 200  increments house points up and down on an updated article ", () => {
           return request(app)
             .patch("/api/articles/1")
             .send({ inc_Votes: 6 })
@@ -125,7 +193,7 @@ describe("/", () => {
               expect(body.article[0].votes).to.equal(106);
             });
         });
-        it("PATCH status 400, if bad request is given or a inncorect format of a body", () => {
+        it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
           return request(app)
             .patch("/api/articles/2")
             .send({ inc_Votes: "hello" })
@@ -134,7 +202,7 @@ describe("/", () => {
               expect(error.text).to.equal("Bad Request");
             });
         });
-        it("PATCH status 404, if ", () => {
+        it("PATCH STATUS:404, if ", () => {
           return request(app)
             .patch("/api/articles/999")
             .send({ inc_Votes: 6 })
@@ -185,8 +253,8 @@ describe("/", () => {
               });
           });
         });
-        describe.only("/comments", () => {
-          it("GET status :200 responds with array of comments for a given article_id", () => {
+        describe("/comments", () => {
+          it("GET STATUS::200 responds with array of comments for a given article_id", () => {
             return request(app)
               .get("/api/articles/5/comments")
               .expect(200)
@@ -202,7 +270,7 @@ describe("/", () => {
                 );
               });
           });
-          it("POST STATUS: 404, valid username input but no such article_id ", () => {
+          it("Get STATUS: 404, valid username input but no such article_id ", () => {
             return request(app)
               .get("/api/articles/2/comments")
               .expect(404)
@@ -210,7 +278,7 @@ describe("/", () => {
                 expect(err.text).to.eql("Route Not Found");
               });
           });
-          it("POST STATUS: 400, invalid username input ", () => {
+          it("Get STATUS: 400, invalid username input ", () => {
             return request(app)
               .get("/api/articles/hello/comments")
               .expect(400)
@@ -218,13 +286,65 @@ describe("/", () => {
                 expect(err.text).to.eql("Bad Request");
               });
           });
-          it("Get status 200 takes a sortby query", () => {
+          it("Get STATUS:200 takes a sortby query", () => {
             return request(app)
               .get("/api/articles/1/comments?sort_by=votes&&order=asc")
               .expect(200)
               .then(({ body }) => {
                 expect(body.comments).to.be.sortedBy("votes");
               });
+          });
+        });
+        describe("/:comments_id", () => {
+          it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
+            return request(app)
+              .patch("/api/comments/1")
+              .send({ inc_Votes: 6 })
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comment[0]).to.have.keys(
+                  "comment_id",
+                  "author",
+                  "article_id",
+                  "votes",
+                  "created_at",
+                  "body"
+                );
+              });
+          });
+          it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
+            return request(app)
+              .patch("/api/comments/1")
+              .send({ inc_Votes: 6 })
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comment[0].votes).to.eql(22);
+              });
+          });
+          it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
+            return request(app)
+              .patch("/api/comments/2")
+              .send({ inc_Votes: "hello" })
+              .expect(400)
+              .then(error => {
+                expect(error.text).to.equal("Bad Request");
+              });
+          });
+          it("PATCH STATUS:404, if vaild input by comment_id is not found ", () => {
+            return request(app)
+              .patch("/api/comments/999")
+              .send({ inc_Votes: 6 })
+              .expect(404)
+              .then(error => {
+                expect(error.text).to.equal("Route Not Found");
+              });
+          });
+        });
+        describe.only("/:comment_id", () => {
+          it("DELETE, status:204 delete a comment by given comment_id", () => {
+            return request(app)
+              .delete("/api/comments/999")
+              .expect(204);
           });
         });
       });
