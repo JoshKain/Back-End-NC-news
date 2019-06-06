@@ -356,7 +356,8 @@ Should accept the following queries:
 ```http
 POST /api/articles
 
-DELETE /api/articles/:article_id
+DELETE /api/articles/:article_id use cascades on migration if it references somethign but can use on delete/on null or cascades
+
 
 POST /api/topics
 

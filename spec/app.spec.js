@@ -240,7 +240,7 @@ describe("/", () => {
               .send({ username: "mitch", body: "today is a good day" })
               .expect(404)
               .then(err => {
-                expect(err.text).to.eql("Invalid username input");
+                expect(err.text).to.eql("Invalid Username input");
               });
           });
           it("POST STATUS: 400, invaild parametric point ", () => {
@@ -251,6 +251,12 @@ describe("/", () => {
               .then(err => {
                 expect(err.text).to.eql("Bad Request");
               });
+          });
+          it("POST STATUS: 400, missing required fields ", () => {
+            return request(app)
+              .post("/api/articles/1/comments")
+              .send({ body: "today is a good day" })
+              .expect(400);
           });
         });
         describe("/comments", () => {

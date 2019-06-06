@@ -5,19 +5,20 @@ const {
   sendCommentsByArticle_id
 } = require("../controllers/send-comments-by-article_id");
 const { sendAllArticles } = require("../controllers/send-all-articles");
+const { methodNotAllowed } = require("../errors/index");
 
 articlesRouter.route("/").get(sendAllArticles);
 
 articlesRouter
   .route("/:article_id")
   .get(sendArticleByArticle_id)
-  .patch(sendArticleByArticle_id);
-//   .all("/*", (res, req, next) => {
-//     next({ status: 405, msg: "Route not found" });
-//   });
+  .patch(sendArticleByArticle_id)
+  .all(methodNotAllowed);
+
 articlesRouter
   .route("/:article_id/comments")
   .post(addNewComment)
-  .get(sendCommentsByArticle_id);
+  .get(sendCommentsByArticle_id)
+  .all(methodNotAllowed);
 
 module.exports = articlesRouter;
