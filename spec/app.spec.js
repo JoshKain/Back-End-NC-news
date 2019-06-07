@@ -258,7 +258,7 @@ describe("/", () => {
               .expect(400);
           });
         });
-        describe.only("/comments", () => {
+        describe("/comments", () => {
           it("GET STATUS::200 responds with array of comments for a given article_id", () => {
             return request(app)
               .get("/api/articles/5/comments")
@@ -300,8 +300,7 @@ describe("/", () => {
               .get("/api/articles/1/comments?sort_by=votes&&order=asc")
               .expect(200)
               .then(({ body }) => {
-                console.log(body);
-                expect(body.comments.comments).to.be.sortedBy("votes");
+                expect(body.comments).to.be.sortedBy("votes");
               });
           });
           it("Get STATUS:400 query sorrt_by is invaild", () => {
