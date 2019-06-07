@@ -145,14 +145,14 @@ Hints:
 - use `author` for the column to store the username that created the comment
 - use the data from the `test-data` in your tests -->
 
-### GET `/api/articles/2/comments`
+<!-- ### GET `/api/articles/2/comments`
 
 Assertion: expected 404 to equal 200
 
 Hints:
 
 - return 200: OK when the article exists
-- serve an empty array when the article exists but has no comments
+- serve an empty array when the article exists but has no comments -->
 
 <!-- ### GET `/api/articles/1/comments?sort_by=not-a-valid-column`
 

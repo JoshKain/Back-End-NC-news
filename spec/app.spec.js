@@ -258,7 +258,7 @@ describe("/", () => {
               .expect(400);
           });
         });
-        describe.only("/comments", () => {
+        describe("/comments", () => {
           it("GET STATUS::200 responds with array of comments for a given article_id", () => {
             return request(app)
               .get("/api/articles/5/comments")
@@ -314,7 +314,7 @@ describe("/", () => {
         });
       });
     });
-    describe.only("/:comments_id", () => {
+    describe("/:comments_id", () => {
       it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
         return request(app)
           .patch("/api/comments/1")
