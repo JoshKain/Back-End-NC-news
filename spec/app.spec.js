@@ -186,7 +186,7 @@ describe("/", () => {
         it("PATCH -article_id- STATUS:: 200  increments house points up and down on an updated article ", () => {
           return request(app)
             .patch("/api/articles/1")
-            .send({ inc_Votes: 6 })
+            .send({ inc_votes: 6 })
             .expect(200)
             .then(({ body }) => {
               expect(body.article.votes).to.equal(106);
@@ -195,7 +195,7 @@ describe("/", () => {
         it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
           return request(app)
             .patch("/api/articles/2")
-            .send({ inc_Votes: "hello" })
+            .send({ inc_votes: "hello" })
             .expect(400)
             .then(error => {
               expect(error.text).to.equal("Bad Request");
@@ -204,7 +204,7 @@ describe("/", () => {
         it("PATCH STATUS:404, if ", () => {
           return request(app)
             .patch("/api/articles/999")
-            .send({ inc_Votes: 6 })
+            .send({ inc_votes: 6 })
             .expect(404)
             .then(error => {
               expect(error.text).to.equal("Route Not Found");
@@ -258,7 +258,7 @@ describe("/", () => {
               .expect(400);
           });
         });
-        describe("/comments", () => {
+        describe.only("/comments", () => {
           it("GET STATUS::200 responds with array of comments for a given article_id", () => {
             return request(app)
               .get("/api/articles/5/comments")
@@ -300,7 +300,8 @@ describe("/", () => {
               .get("/api/articles/1/comments?sort_by=votes&&order=asc")
               .expect(200)
               .then(({ body }) => {
-                expect(body.comments).to.be.sortedBy("votes");
+                console.log(body);
+                expect(body.comments.comments).to.be.sortedBy("votes");
               });
           });
           it("Get STATUS:400 query sorrt_by is invaild", () => {

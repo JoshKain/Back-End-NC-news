@@ -9,8 +9,8 @@ exports.fetchArticleByArticle_id = ({ article_id, num }) => {
     .groupBy("articles.article_id")
     .where("articles.article_id", "=", article_id.article_id)
     .modify(query => {
-      if (num.inc_Votes !== undefined)
-        query.increment("votes", num.inc_Votes || 0).returning("*");
+      if (num.inc_votes !== undefined)
+        query.increment("votes", num.inc_votes || 0).returning("*");
     })
     .returning("*");
 };

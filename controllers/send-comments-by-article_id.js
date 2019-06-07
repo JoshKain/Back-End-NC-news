@@ -21,7 +21,7 @@ exports.sendCommentsByArticle_id = (req, res, next) => {
             } else res.status(200).send({ comments });
           }
         );
-      } else res.status(200).send({ comments });
+      } else res.status(200).send({ comments: comments });
     })
     .catch(next);
 };
