@@ -20,7 +20,7 @@ describe("/", () => {
         .get("/api")
         .expect(200)
         .then(({ body }) => {
-          expect(body.ok).to.equal(true);
+          expect(body.api).to.be.an("array");
         });
     });
     describe("/topics", () => {
