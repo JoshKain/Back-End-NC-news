@@ -84,8 +84,8 @@ describe("/", () => {
           .get("/api/articles")
           .expect(200)
           .then(({ body }) => {
-            expect(body.length).to.equal(12);
-            expect(body[0]).to.have.keys(
+            expect(body.articles.length).to.equal(12);
+            expect(body.articles[0]).to.have.keys(
               "author",
               "title",
               "article_id",
@@ -102,7 +102,7 @@ describe("/", () => {
           .get("/api/articles?sort_by=created_at&&order=asc")
           .expect(200)
           .then(({ body }) => {
-            expect(body).to.be.ascendingBy("created_at");
+            expect(body.articles).to.be.ascendingBy("created_at");
           });
       });
       it("GET STATUS::200, responds with an articles array sorted by specific property and in desc order", () => {
@@ -110,7 +110,7 @@ describe("/", () => {
           .get("/api/articles?sort_by=article_id")
           .expect(200)
           .then(({ body }) => {
-            expect(body).to.be.descendingBy("article_id");
+            expect(body.articles).to.be.descendingBy("article_id");
           });
       });
       it("GET STATUS::200, responds with an articles array of username value specified to a query for an author", () => {
@@ -118,11 +118,11 @@ describe("/", () => {
           .get("/api/articles?author=butter_bridge")
           .expect(200)
           .then(({ body }) => {
-            expect(body[0].author).to.equal("butter_bridge");
-            expect(body).to.have.length(3);
+            expect(body.articles[0].author).to.equal("butter_bridge");
+            expect(body.articles).to.have.length(3);
           });
       });
-      it("GET STATUS::404,responds with an error due to an invaild input", () => {
+      it("GET STATUS:404,responds with an error due to an invaild input", () => {
         return request(app)
           .get("/api/articles?author=R2D2")
           .expect(404)
@@ -130,16 +130,16 @@ describe("/", () => {
             expect(error.text).to.equal("No such author or topic");
           });
       });
-      it("GET STATUS::200, responds with an articles array of topics value specified to a query for an topic", () => {
+      it("GET STATUS:200, responds with an articles array of topics value specified to a query for an topic", () => {
         return request(app)
           .get("/api/articles?topic=cats")
           .expect(200)
           .then(({ body }) => {
-            expect(body[0].topic).to.equal("cats");
-            expect(body).to.have.length(1);
+            expect(body.articles[0].topic).to.equal("cats");
+            expect(body.articles).to.have.length(1);
           });
       });
-      it("GET STATUS::404,responds with an error due to an invaild input", () => {
+      it("GET STATUS:404,responds with an error due to an invaild input", () => {
         return request(app)
           .get("/api/articles?topic=xx")
           .expect(404)
@@ -153,8 +153,7 @@ describe("/", () => {
             .get("/api/articles/1")
             .expect(200)
             .then(({ body }) => {
-              expect(body.article.length).to.eql(1);
-              expect(body.article[0]).to.contain.keys(
+              expect(body.article).to.contain.keys(
                 "author",
                 "title",
                 "article_id",
@@ -190,7 +189,7 @@ describe("/", () => {
             .send({ inc_Votes: 6 })
             .expect(200)
             .then(({ body }) => {
-              expect(body.article[0].votes).to.equal(106);
+              expect(body.article.votes).to.equal(106);
             });
         });
         it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
@@ -223,8 +222,8 @@ describe("/", () => {
               })
               .expect(201)
               .then(({ body }) => {
-                expect(body.newComment[0].author).to.equal("lurker");
-                expect(body.newComment[0]).to.have.keys(
+                expect(body.comment.author).to.equal("lurker");
+                expect(body.comment).to.have.keys(
                   "author",
                   "body",
                   "votes",
@@ -259,13 +258,12 @@ describe("/", () => {
               .expect(400);
           });
         });
-        describe("/comments", () => {
+        describe.only("/comments", () => {
           it("GET STATUS::200 responds with array of comments for a given article_id", () => {
             return request(app)
               .get("/api/articles/5/comments")
               .expect(200)
               .then(({ body }) => {
-                expect(body.comments).to.have.lengthOf(2);
                 expect(body.comments[0]).to.have.keys(
                   "comment_id",
                   "votes",
@@ -276,9 +274,14 @@ describe("/", () => {
                 );
               });
           });
-          it("Get STATUS: 404, valid username input but no such article_id ", () => {
+          it("Get STATUS: 200, article_id does exist but doesnt have any comments recieve empty array", () => {
             return request(app)
               .get("/api/articles/2/comments")
+              .expect(200);
+          });
+          it("Get STATUS: 404, valid username input but no such article_id ", () => {
+            return request(app)
+              .get("/api/articles/99999/comments")
               .expect(404)
               .then(err => {
                 expect(err.text).to.eql("Route Not Found");
@@ -300,17 +303,25 @@ describe("/", () => {
                 expect(body.comments).to.be.sortedBy("votes");
               });
           });
+          it("Get STATUS:400 query sorrt_by is invaild", () => {
+            return request(app)
+              .get("/api/articles/1/comments?sort_by=bob&&order=asc")
+              .expect(400)
+              .then(err => {
+                expect(err.text).to.equal("Bad Request");
+              });
+          });
         });
       });
     });
-    describe("/:comments_id", () => {
+    describe.only("/:comments_id", () => {
       it("PATCH STATUS: 200 takes acomment_id and a body of {inc_Votes :newVote} and increments votes by newVote ", () => {
         return request(app)
           .patch("/api/comments/1")
           .send({ inc_Votes: 6 })
           .expect(200)
           .then(({ body }) => {
-            expect(body.comment[0]).to.have.keys(
+            expect(body.comment).to.have.keys(
               "comment_id",
               "author",
               "article_id",
@@ -326,7 +337,7 @@ describe("/", () => {
           .send({ inc_Votes: 6 })
           .expect(200)
           .then(({ body }) => {
-            expect(body.comment[0].votes).to.eql(22);
+            expect(body.comment.votes).to.eql(22);
           });
       });
       it("PATCH STATUS:400, if bad request is given or a inncorect format of a body", () => {
@@ -345,6 +356,15 @@ describe("/", () => {
           .expect(404)
           .then(error => {
             expect(error.text).to.equal("Route Not Found");
+          });
+      });
+      it("PATCH STATUS:400, if invaild key of inc_Votes ", () => {
+        return request(app)
+          .patch("/api/comments/2")
+          .send({ wrongKey: 1 })
+          .expect(400)
+          .then(error => {
+            expect(error.text).to.equal("Bad Request");
           });
       });
     });

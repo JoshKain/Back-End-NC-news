@@ -5,7 +5,7 @@ exports.sendAllArticles = (req, res, next) => {
     .then(articles => {
       if (articles.length < 1) {
         next({ status: 404, msg: "No such author or topic" });
-      } else res.status(200).send(articles);
+      } else res.status(200).send({ articles });
     })
     .catch(next);
 };

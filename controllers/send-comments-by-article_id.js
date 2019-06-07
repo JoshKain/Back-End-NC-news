@@ -5,8 +5,9 @@ const {
 exports.sendCommentsByArticle_id = (req, res, next) => {
   const article_id = req.params;
   fetchCommentsByArticle_id({ article_id }, req.query)
-    .then(comments => {
-      if (comments.length < 1) {
+    .then(([...comments]) => {
+      console.log(comments);
+      if (!comments) {
         return Promise.reject({
           status: 404,
           msg: "Route Not Found"
