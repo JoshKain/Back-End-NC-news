@@ -84,7 +84,6 @@ describe("/", () => {
           .get("/api/articles")
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles.length).to.equal(12);
             expect(body.articles[0]).to.have.keys(
               "author",
               "title",
@@ -386,6 +385,26 @@ describe("/", () => {
           .then(({ error }) => {
             expect(error.text).to.equal("No such comment_id");
           });
+      });
+    });
+    describe("/api", () => {
+      describe("/ articles", () => {
+        it("GET status:200 get all articles but limited to 10", () => {
+          return request(app)
+            .get("/api/articles?limit=10")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles).to.have.lengthOf(10);
+            });
+        });
+        it("GET status:200 get all articles but limited to 10", () => {
+          return request(app)
+            .get("/api/articles?limit=5&&p=2")
+            .expect(200)
+            .then(({ body }) => {
+              console.log(body);
+            });
+        });
       });
     });
   });

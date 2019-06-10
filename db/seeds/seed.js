@@ -22,14 +22,14 @@ exports.seed = (knex, Promise) => {
         .insert(formatTimestamp(articlesData, "created_at"))
         .returning("*")
         .then(articles => {
-          let ref = createRef(articles, "title", "article_id");
-          let comments = formatBelongToKey(
+          const ref = createRef(articles, "title", "article_id");
+          const comments = formatBelongToKey(
             commentsData,
             "created_by",
             "author"
           );
-          let formatedData = formatData(comments, ref);
-          let final = formatBelongToKey(
+          const formatedData = formatData(comments, ref);
+          const final = formatBelongToKey(
             formatedData,
             "belongs_to",
             "article_id"
