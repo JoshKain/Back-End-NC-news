@@ -65,10 +65,6 @@ next is great in the catch because the catch receives all errors that occur abov
 
 - is it?
 
-## README
-
-- do you have one?
-
 ## Others
 
 - make sure to remove additional unrequired files (e.g. quiries.sql)

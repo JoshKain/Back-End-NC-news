@@ -78,7 +78,7 @@ describe("/", () => {
         });
       });
     });
-    describe("/articles", () => {
+    describe.only("/articles", () => {
       it("GET STATUS::200, responds with an articles array of article objects each with properties author, title, article_id, topic, created_at, votes and comment count", () => {
         return request(app)
           .get("/api/articles")
@@ -397,13 +397,25 @@ describe("/", () => {
               expect(body.articles).to.have.lengthOf(10);
             });
         });
-        it("GET status:200 get all articles but limited to 10", () => {
+        it("GET status:200 get all articles but limited to 5 pg 2", () => {
           return request(app)
             .get("/api/articles?limit=5&&p=2")
             .expect(200)
             .then(({ body }) => {
-              console.log(body);
+              expect(body.articles[0].article_id).to.equal(6);
             });
+        });
+      });
+      describe("/:articles:", () => {
+        describe("/comments", () => {
+          it("GET status 200 get all articles but limited to 10 0n pg 1", () => {
+            return request(app)
+              .get("/api/articles/1/comments?limit=5&&p=2")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comments[0].comment_id).to.equal(7);
+              });
+          });
         });
       });
     });

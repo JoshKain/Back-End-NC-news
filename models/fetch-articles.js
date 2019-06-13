@@ -1,6 +1,13 @@
 const connection = require("../db/connection");
 
-exports.fetchArticles = ({ sort_by, order, author, topic, limit = 5, p }) => {
+exports.fetchArticles = ({
+  sort_by,
+  order,
+  author,
+  topic,
+  limit = 10,
+  p = 1
+}) => {
   return connection
     .select("articles.*")
     .count("comment_id AS comment_count")
@@ -16,6 +23,7 @@ exports.fetchArticles = ({ sort_by, order, author, topic, limit = 5, p }) => {
         query.where("articles.topic", "=", topic);
       }
     })
+
     .limit(limit)
-    .offset(p);
+    .offset((p - 1) * limit);
 };

@@ -7,6 +7,7 @@ const {
 
 exports.sendCommentsByArticle_id = (req, res, next) => {
   const article_id = req.params;
+
   fetchCommentsByArticle_id({ article_id }, req.query)
     .then(([...comments]) => {
       if (comments.length < 1) {

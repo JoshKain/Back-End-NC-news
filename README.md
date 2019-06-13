@@ -24,7 +24,7 @@ git clone https://github.com/JoshKain/Back-End-NC-news.git
 2. `cd` into the repository
 
 ```bash
-cd nc-news/
+cd be-nc-news/
 ```
 
 3. Install the dependencies
