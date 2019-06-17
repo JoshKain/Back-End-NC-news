@@ -6,10 +6,12 @@ const {
 } = require("../controllers/send-comments-by-article_id");
 const { sendAllArticles } = require("../controllers/send-all-articles");
 const { methodNotAllowed } = require("../errors/index");
+const { addNewArticle } = require("../controllers/add-article");
 
 articlesRouter
   .route("/")
   .get(sendAllArticles)
+  .post(addNewArticle)
   .all(methodNotAllowed);
 
 articlesRouter

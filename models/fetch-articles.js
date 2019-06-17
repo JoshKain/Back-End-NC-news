@@ -23,7 +23,6 @@ exports.fetchArticles = ({
         query.where("articles.topic", "=", topic);
       }
     })
-
     .limit(limit)
     .offset((p - 1) * limit);
 };

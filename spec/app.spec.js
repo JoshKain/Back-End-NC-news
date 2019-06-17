@@ -35,14 +35,50 @@ describe("/", () => {
       });
       it("GET STATUS: 404 route not found if anything else is attached to topics", () => {
         return request(app)
-          .get("/api/topic/invaild")
+          .get("/api/topics/invaild")
           .expect(404)
           .then(({ body }) => {
             expect(body.msg).to.equal("Route Not Found");
           });
       });
+      it("POST STATUS : 201 request body accepts an obj with username and body properties responds with posted topic ", () => {
+        return request(app)
+          .post("/api/topics")
+          .send({ description: "CODING WORLD WIDE", slug: "coding" })
+          .expect(201)
+          .then(({ body }) => {
+            expect(body.topic).to.have.keys("description", "slug");
+          });
+      });
     });
-    describe("/users", () => {
+    describe.only("/users", () => {
+      it("POST STATUS : 201 request body accepts an obj with username and body properties responds with posted users", () => {
+        return request(app)
+          .post("/api/users")
+          .send({
+            username: "surfingBoy",
+            name: "JoshyKain",
+            avatar_url:
+              "https://media.giphy.com/media/xT9IgKyHvBNqm1guMo/giphy.gif"
+          })
+          .expect(201)
+          .then(({ body }) => {
+            expect(body.user).to.have.keys("username", "name", "avatar_url");
+          });
+      });
+      it("POST STATUS : 400 incorrect body structure", () => {
+        return request(app)
+          .post("/api/users")
+          .send({
+            user: "surfingBoy",
+            name: "JoshyKain",
+            avatar: "https://media.giphy.com/media/xT9IgKyHvBNqm1guMo/giphy.gif"
+          })
+          .expect(400)
+          .then(error => {
+            expect(error.text).to.equal("Bad Request");
+          });
+      });
       describe(":username", () => {
         it("GET STATUS: 200 should return a user object with following properties username, avatar_url, name for specific user", () => {
           return request(app)
@@ -78,7 +114,7 @@ describe("/", () => {
         });
       });
     });
-    describe.only("/articles", () => {
+    describe("/articles", () => {
       it("GET STATUS::200, responds with an articles array of article objects each with properties author, title, article_id, topic, created_at, votes and comment count", () => {
         return request(app)
           .get("/api/articles")
@@ -145,6 +181,44 @@ describe("/", () => {
           .then(({ error }) => {
             expect(error.text).to.equal("No such author or topic");
           });
+      });
+      describe("/articles", () => {
+        it("POST status :201 request body accepts an obj with username and body properties responds with posted article", () => {
+          return request(app)
+            .post("/api/articles")
+            .send({
+              title: "Mandels long walk to freedom",
+              topic: "cats",
+              author: "icellusedkars",
+              body: "South Africans are all my children",
+              votes: 50
+            })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.article).to.have.keys(
+                "article_id",
+                "title",
+                "topic",
+                "author",
+                "body",
+                "votes",
+                "created_at"
+              );
+            });
+        });
+        it("POST STATUS: 404, invalid input ", () => {
+          return request(app)
+            .post("/api/articles")
+            .send({
+              title: "Mandels long walk to freedom",
+              body: "South Africans are all my children",
+              votes: 50
+            })
+            .expect(400)
+            .then(err => {
+              expect(err.text).to.eql("Invalid Key input");
+            });
+        });
       });
       describe("/:article_id", () => {
         it("GET STATUS:200, reponds an article obj which should have following properties,author, title, article_id, body, topic, created_at,votes, comment_count ", () => {
