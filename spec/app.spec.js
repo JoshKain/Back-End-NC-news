@@ -51,7 +51,7 @@ describe("/", () => {
           });
       });
     });
-    describe.only("/users", () => {
+    describe("/users", () => {
       it("POST STATUS : 201 request body accepts an obj with username and body properties responds with posted users", () => {
         return request(app)
           .post("/api/users")
@@ -78,6 +78,11 @@ describe("/", () => {
           .then(error => {
             expect(error.text).to.equal("Bad Request");
           });
+      });
+      it.only("GET STAUTS: 200 all the users", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200);
       });
       describe(":username", () => {
         it("GET STATUS: 200 should return a user object with following properties username, avatar_url, name for specific user", () => {
