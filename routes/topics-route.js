@@ -9,6 +9,4 @@ topicsRouter
   .post(addTopic)
   .all(methodNotAllowed);
 
-topicsRouter.all("/*", routeNotFound);
-
 module.exports = topicsRouter;

@@ -1,6 +1,6 @@
 const connection = require("../db/connection");
 
-exports.fetchDeletedComment = ({ comment_id }) => {
+exports.fetchCommentToBeDeleted = ({ comment_id }) => {
   return connection
     .select("*")
     .from("comments")

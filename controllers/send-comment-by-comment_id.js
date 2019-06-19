@@ -8,9 +8,9 @@ exports.sendCommentByComment_id = (req, res, next) => {
   fetchCommentByComment_id({ comment_id, num })
     .then(([comment]) => {
       if (!comment) {
-        next({ status: 404, msg: "Route Not Found" });
+        return Promise.reject({ status: 404, msg: "Route Not Found" });
       } else if (!num.inc_Votes) {
-        next({ status: 400, msg: "Bad Request" });
+        return Promise.reject({ status: 400, msg: "Bad Request" });
       } else res.status(200).send({ comment });
     })
     .catch(next);

@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     articlesTable.increments("article_id").primary();
     articlesTable.string("title");
     articlesTable.text("body");
-    articlesTable.integer("votes").defaultTo(0); // deafult to zero
+    articlesTable.integer("votes").defaultTo(0); // default to zero
     articlesTable.string("topic").references("topics.slug");
     articlesTable
       .string("author")

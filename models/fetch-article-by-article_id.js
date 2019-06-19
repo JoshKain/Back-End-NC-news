@@ -10,7 +10,7 @@ exports.fetchArticleByArticle_id = ({ article_id, num }) => {
     .where("articles.article_id", "=", article_id.article_id)
     .modify(query => {
       if (num.inc_votes !== undefined)
-        query.increment("votes", num.inc_votes || 0).returning("*");
+        query.increment("votes", num.inc_votes || 0);
     })
     .returning("*");
 };

@@ -14,6 +14,5 @@ commentsRouter
   .patch(sendCommentByComment_id)
   .delete(deleteCommentByComment_id)
   .all(methodNotAllowed);
-commentsRouter.all("/*", routeNotFound);
 
 module.exports = commentsRouter;

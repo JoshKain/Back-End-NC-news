@@ -29,13 +29,13 @@ exports.seed = (knex, Promise) => {
             "author"
           );
           const formatedData = formatData(comments, ref);
-          const final = formatBelongToKey(
+          const commentsAdded = formatBelongToKey(
             formatedData,
             "belongs_to",
             "article_id"
           );
           return knex("comments")
-            .insert(formatTimestamp(final, "created_at"))
+            .insert(formatTimestamp(commentsAdded, "created_at"))
             .returning("*");
         });
     });

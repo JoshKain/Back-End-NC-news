@@ -8,7 +8,7 @@ exports.sendArticleByArticle_id = (req, res, next) => {
   fetchArticleByArticle_id({ article_id, num })
     .then(([article]) => {
       if (!article) {
-        next({ status: 404, msg: "Route Not Found" });
+        return Promise.reject({ status: 404, msg: "Route Not Found" });
       } else res.status(200).send({ article });
     })
     .catch(next);

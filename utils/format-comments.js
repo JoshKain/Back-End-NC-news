@@ -1,7 +1,8 @@
 exports.formatBelongToKey = (dataArr, keyToChange, newKey) => {
   if (!keyToChange) return [...dataArr];
-  return dataArr.map(comments => {
-    const value = { [newKey]: comments[keyToChange], ...comments };
+  let newDataArr = [...dataArr];
+  return newDataArr.map(obj => {
+    const value = { [newKey]: obj[keyToChange], ...obj };
     delete value[keyToChange];
     return value;
   });
@@ -20,10 +21,10 @@ exports.formatData = (dataArr, refArr) => {
     return dataArr;
   }
   return dataArr.map(eachChar => {
-    let x = refArr.find(eachRef => {
+    let BelongsTo = refArr.find(eachRef => {
       return Object.keys(eachRef)[0] === eachChar.belongs_to;
     });
-    eachChar.belongs_to = x[eachChar.belongs_to];
+    eachChar.belongs_to = BelongsTo[eachChar.belongs_to];
     const { article_id, ...rest } = eachChar;
     return eachChar;
   });

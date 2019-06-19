@@ -10,6 +10,7 @@
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
     "test": "mocha ./spec/*.spec.js",
+    "test-utils": "mocha ./spec/utils.spec.js",
     "seed": "knex seed:run",
     "dev": "nodemon listen.js",
     "start": "node listen.js",

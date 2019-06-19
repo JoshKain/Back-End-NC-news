@@ -1,13 +1,13 @@
-const { fetchDeletedComment } = require("../models/fetch-deleted-comment");
+const { fetchCommentToBeDeleted } = require("../models/fetch-deleted-comment");
 
 exports.deleteCommentByComment_id = (req, res, next) => {
-  fetchDeletedComment(req.params)
+  fetchCommentToBeDeleted(req.params)
     .then(body => {
       if (!body[0]) {
-        next({ status: 404, msg: "No such comment_id" });
+        return Promise.reject({ status: 404, msg: "No such comment_id" });
       } else
         res.status(204).send({
-          msg: `comment_id ${req.params} has been sucessfully deleted`
+          msg: `comment_id ${req.params} has been successfully deleted`
         });
     })
     .catch(next);
