@@ -130,7 +130,7 @@ describe("/", () => {
         });
       });
     });
-    describe("/articles", () => {
+    describe.only("/articles", () => {
       it("GET STATUS: 200, responds with an articles array of article objects each with properties author, title, article_id, topic, created_at, votes and comment count", () => {
         return request(app)
           .get("/api/articles")
@@ -169,6 +169,7 @@ describe("/", () => {
           .get("/api/articles?author=butter_bridge")
           .expect(200)
           .then(({ body }) => {
+            console.log(body);
             expect(body.articles[0].author).to.equal("butter_bridge");
             expect(body.articles).to.have.length(3);
           });
