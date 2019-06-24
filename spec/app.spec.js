@@ -130,7 +130,7 @@ describe("/", () => {
         });
       });
     });
-    describe.only("/articles", () => {
+    describe("/articles", () => {
       it("GET STATUS: 200, responds with an articles array of article objects each with properties author, title, article_id, topic, created_at, votes and comment count", () => {
         return request(app)
           .get("/api/articles")

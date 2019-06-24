@@ -5,6 +5,8 @@ const { psqlErrors, customErrors } = require("./errors/custom-errors");
 
 const app = express();
 
+app.use(cors());
+
 app.use(express.json());
 
 app.use("/api", apiRouter);
