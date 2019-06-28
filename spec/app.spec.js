@@ -156,6 +156,7 @@ describe("/", () => {
             expect(body.articles).to.be.ascendingBy("created_at");
           });
       });
+
       it("GET STATUS: 200, responds with an articles array sorted by specific property and in desc order", () => {
         return request(app)
           .get("/api/articles?sort_by=article_id")
