@@ -8,7 +8,8 @@ module.exports = [
   {
     username: "grumpy19",
     name: "Paul Grump",
-    avatar_url: "https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg"
+    avatar_url:
+      "http://www.fallongrace.org/wp-content/uploads/2012/01/iStock_000017880296Small.jpg"
   },
   {
     username: "happyamy2016",
@@ -19,13 +20,14 @@ module.exports = [
   {
     username: "cooljmessy",
     name: "Peter Messy",
-    avatar_url: "https://i.imgur.com/WfX0Neu.jpg"
+    avatar_url:
+      "https://i.pinimg.com/736x/21/41/39/2141395e625b6fb90d426221d29e1222--cowboy-hats-city-life.jpg"
   },
   {
     username: "weegembump",
     name: "Gemma Bump",
     avatar_url:
-      "https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg"
+      "http://www.cbc.ca/stevenandchris/content/images/dad-joke-haircut.jpg"
   },
   {
     username: "jessjelly",
