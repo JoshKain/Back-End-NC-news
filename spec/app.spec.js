@@ -170,7 +170,6 @@ describe("/", () => {
           .get("/api/articles?author=butter_bridge")
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
             expect(body.articles[0].author).to.equal("butter_bridge");
             expect(body.articles).to.have.length(3);
           });
@@ -299,6 +298,26 @@ describe("/", () => {
             .expect(404)
             .then(error => {
               expect(error.text).to.equal("Route Not Found");
+            });
+        });
+      });
+      describe("/article_id", () => {
+        it("Delete STATUS: 204 successfully delete an article by its id and all it comments", () => {
+          return request(app)
+            .delete("/api/articles/1")
+            .expect(204);
+        });
+        it("DELETE, STATUS: 400 invalid article_id", () => {
+          return request(app)
+            .delete("/api/articles/hello")
+            .expect(400);
+        });
+        it("DELETE, STATUS: 404 valid article_id but none existent", () => {
+          return request(app)
+            .delete("/api/articles/999")
+            .expect(404)
+            .then(({ error }) => {
+              expect(error.text).to.equal("No such article_id");
             });
         });
       });
