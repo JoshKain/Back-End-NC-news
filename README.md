@@ -11,7 +11,7 @@ Hosted: https://joshs-coding-world.herokuapp.com/
 - node version 10
 - PostgreSQL version 11
 - npm version 6
-- API Testing tool (Insomnia, etc.)
+- API Testing tool (Insomnia, mocha, chai etc.)
 
 ### Installation
 
@@ -24,7 +24,7 @@ git clone https://github.com/JoshKain/Back-End-NC-news.git
 2. `cd` into the repository
 
 ```bash
-cd be-nc-news/
+cd nc-news-be/
 ```
 
 3. Install the dependencies
