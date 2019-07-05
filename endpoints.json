@@ -11,6 +11,13 @@
           "topics": [{ "slug": "football", "description": "Footie!" }]
         }
       },
+      "Post /api/topics": {
+        "description": "serves an array of posted topic if successful",
+        "queries": [{ "slug": "surfing", "description": "surfing in Uk" }],
+        "exampleResponse": {
+          "topics": [{ "slug": "surfing", "description": "surfing in Uk" }]
+        }
+      },
       "GET /api/articles": {
         "description": "serves an array of all topics",
         "queries": ["author", "topic", "sort_by", "order"],
@@ -55,6 +62,33 @@
       "GET /api/articles/:article_id": {
         "description": "serves a single article from article_id",
         "queries": [],
+        "exampleResponse": {
+          "articles": [
+            {
+              "article_id": 1,
+              "title": "Living in the shadow of a great man",
+              "body": "I find this existence challenging",
+              "votes": 106,
+              "topic": "mitch",
+              "author": "butter_bridge",
+              "created_at": "2018-11-15T12:21:54.171Z"
+            }
+          ]
+        }
+      },
+      "POST /api/articles/:article_id": {
+        "description": "serves a new Article for a specif user",
+        "queries": [
+          {
+            "article_id": 1,
+            "title": "Living in the shadow of a great man",
+            "body": "I find this existence challenging",
+            "votes": 106,
+            "topic": "mitch",
+            "author": "butter_bridge",
+            "created_at": "2018-11-15T12:21:54.171Z"
+          }
+        ],
         "exampleResponse": {
           "articles": [
             {
